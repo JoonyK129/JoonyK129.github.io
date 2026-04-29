@@ -168,17 +168,14 @@
     }
 
     .avatar {
-      width: 112px;
-      height: 112px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-dark);
-      font-size: 2.1rem;
-      font-weight: 900;
-      margin-bottom: 18px;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  margin-bottom: 18px;
+  border: 1px solid var(--line);
     }
 
     .profile-card h2 {
@@ -376,7 +373,7 @@ I completed my Ph.D. at POSTECH in 2026 under the guidance of Prof. Soohee Han.
         </div>
 
         <aside class="profile-card">
-          <div class="avatar">JK</div>
+          <img class="avatar" src="files/photo.jpg" alt="Joonhee Kim profile photo" />
           <h2>Joonhee Kim</h2>
           <p>POSTECH · <a href="https://cocel.postech.ac.kr/">CoCEL</a> <br />Battery modeling and AI-based diagnostics</p>
           <ul class="info-list">
