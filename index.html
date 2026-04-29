@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joonhee Kim | Battery Modeling & AI</title>
+  <meta name="description" content="Personal research website of Joonhee Kim: lithium-ion battery modeling, degradation diagnosis, and AI-driven battery management." />
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --accent: #2563eb;
+      --accent-dark: #1e40af;
+      --soft: #eff6ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-dark);
+      text-decoration: underline;
+    }
+
+    .container {
+      width: min(1080px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 68px;
+      gap: 24px;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      list-style: none;
+      font-size: 0.94rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 92px 0 64px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 0.85fr;
+      gap: 44px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4.3rem);
+      line-height: 1.05;
+      letter-spacing: -0.055em;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      font-size: 1.12rem;
+      color: var(--muted);
+      max-width: 720px;
+      margin-bottom: 28px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .button:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .profile-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+    }
+
+    .avatar {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-dark);
+      font-size: 2.1rem;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    .profile-card h2 {
+      font-size: 1.35rem;
+      margin-bottom: 6px;
+    }
+
+    .profile-card p {
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .info-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      font-size: 0.94rem;
+      color: var(--muted);
+    }
+
+    section {
+      padding: 54px 0;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 14px;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      max-width: 760px;
+      margin-bottom: 26px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+    }
+
+    .card h3 {
+      font-size: 1.12rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      background: var(--soft);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+
+    .publication {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .publication:last-child {
+      border-bottom: none;
+    }
+
+    .publication-title {
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .publication-meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .contact-box {
+      background: #111827;
+      color: white;
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .contact-box p {
+      color: #d1d5db;
+      max-width: 680px;
+    }
+
+    .contact-box a {
+      color: white;
+      font-weight: 800;
+    }
+
+    footer {
+      padding: 34px 0 48px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 820px) {
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px 0;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 12px 18px;
+      }
+
+      .hero-grid, .grid.three, .grid.two, .contact-box {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero {
+        padding-top: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a class="logo" href="#top">Joonhee Kim</a>
+        <ul class="nav-links">
+          <li><a href="#research">Research</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="#cv">CV</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Battery Modeling · Degradation Diagnosis · AI-driven BMS</div>
+          <h1>Joonhee Kim</h1>
+          <p>
+            I work on lithium-ion battery diagnosis and control by connecting high-fidelity electrochemical models,
+            degradation-aware simulation, and artificial intelligence. My research focuses on synthetic data generation,
+            parameter estimation, fault diagnosis, and fast-charging optimization for next-generation battery management systems.
+          </p>
+          <div class="button-row">
+            <a class="button primary" href="#publications">View Publications</a>
+            <a class="button" href="#projects">View Projects</a>
+            <a class="button" href="files/CV.pdf">Download CV</a>
+          </div>
+        </div>
+
+        <aside class="profile-card">
+          <div class="avatar">JK</div>
+          <h2>Joonhee Kim</h2>
+          <p>POSTECH · Energy Team<br />Battery modeling and AI-based diagnostics</p>
+          <ul class="info-list">
+            <li><strong>Affiliation:</strong> POSTECH</li>
+            <li><strong>Research:</strong> Lithium-ion batteries</li>
+            <li><strong>Methods:</strong> P2D modeling, degradation models, optimization, reinforcement learning</li>
+            <li><strong>GitHub:</strong> <a href="https://github.com/JoonyK129">github.com/JoonyK129</a></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="research">
+      <div class="container">
+        <h2 class="section-title">Research Interests</h2>
+        <p class="section-lead">
+          My research aims to make battery management more physically informed, data-efficient, and degradation-aware.
+        </p>
+        <div class="grid three">
+          <article class="card">
+            <h3>Electrochemical Battery Modeling</h3>
+            <p>
+              High-fidelity lithium-ion battery modeling based on electrochemical dynamics and degradation mechanisms.
+            </p>
+            <div class="tag-row">
+              <span class="tag">P2D model</span>
+              <span class="tag">SEI growth</span>
+              <span class="tag">Li plating</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>AI-driven Diagnosis</h3>
+            <p>
+              Synthetic data generation and model-based learning for battery state estimation, degradation diagnosis, and fault detection.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Data augmentation</span>
+              <span class="tag">Fault detection</span>
+              <span class="tag">Digital twin</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Degradation-aware Control</h3>
+            <p>
+              Fast-charging and load-profile optimization that accounts for internal electrochemical safety boundaries and long-term degradation.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Fast charging</span>
+              <span class="tag">RL</span>
+              <span class="tag">Overpotential</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <h2 class="section-title">Selected Projects</h2>
+        <p class="section-lead">
+          The following projects summarize my main research directions. Replace or expand each item as your work develops.
+        </p>
+        <div class="grid two">
+          <article class="card">
+            <h3>Physics-informed Synthetic Battery Data for Diagnostic AI</h3>
+            <p>
+              Development of electrochemical-model-based synthetic cycle data to improve the generalization of battery diagnostic models under unseen operating conditions.
+            </p>
+            <ul>
+              <li>Electrochemical model calibration</li>
+              <li>Cycle data synthesis</li>
+              <li>AI-based diagnosis and fault detection</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Degradation-aware Fast-charging Optimization</h3>
+            <p>
+              Reinforcement-learning-based charging profile design that considers internal electrochemical behavior and degradation mechanisms beyond terminal voltage constraints.
+            </p>
+            <ul>
+              <li>Overpotential envelope tracking</li>
+              <li>Lithium plating-aware charging</li>
+              <li>Deployable BMS-observable policy design</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Metaheuristic Parameter Estimation for Battery Digital Twins</h3>
+            <p>
+              Parameter estimation framework for high-fidelity battery models using adaptive metaheuristic optimization and experimental voltage response matching.
+            </p>
+            <ul>
+              <li>Model calibration</li>
+              <li>Optimization landscape analysis</li>
+              <li>Digital twin construction</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Motion-aware Battery Degradation in Mobile Robots</h3>
+            <p>
+              Analysis of how real robotic and UAV motion profiles induce distinct battery load patterns and degradation behavior.
+            </p>
+            <ul>
+              <li>Current sensing module</li>
+              <li>Motion-conditioned load profiles</li>
+              <li>Virtual degradation experiments</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="publications">
+      <div class="container">
+        <h2 class="section-title">Publications</h2>
+        <p class="section-lead">
+          Add your accepted papers, conference papers, preprints, and abstracts here. The entries below are placeholders.
+        </p>
+        <div class="card">
+          <div class="publication">
+            <div class="publication-title">Title of Your Paper on Battery Diagnosis Using Synthetic Data</div>
+            <div class="publication-meta">Joonhee Kim, Co-authors · Journal or Conference · Year</div>
+            <div><a href="#">Paper</a> · <a href="#">Code</a> · <a href="#">BibTeX</a></div>
+          </div>
+          <div class="publication">
+            <div class="publication-title">Title of Your Paper on Degradation-aware Fast Charging</div>
+            <div class="publication-meta">Joonhee Kim, Co-authors · Journal or Conference · Year</div>
+            <div><a href="#">Paper</a> · <a href="#">Code</a> · <a href="#">BibTeX</a></div>
+          </div>
+          <div class="publication">
+            <div class="publication-title">Title of Your Paper on Battery Model Parameter Estimation</div>
+            <div class="publication-meta">Joonhee Kim, Co-authors · Journal or Conference · Year</div>
+            <div><a href="#">Paper</a> · <a href="#">Code</a> · <a href="#">BibTeX</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cv">
+      <div class="container">
+        <h2 class="section-title">CV</h2>
+        <div class="grid two">
+          <article class="card">
+            <h3>Education</h3>
+            <ul>
+              <li>Ph.D. / Integrated Program, POSTECH, Department or Program Name</li>
+              <li>B.S., University Name, Department Name</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Research Experience</h3>
+            <ul>
+              <li>Battery electrochemical modeling and degradation diagnosis</li>
+              <li>Model-based data augmentation for AI-driven battery management</li>
+              <li>Optimization and reinforcement learning for charging control</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <div>
+            <h2 class="section-title">Contact</h2>
+            <p>
+              For research collaboration, publications, or project inquiries, feel free to contact me by email or GitHub.
+            </p>
+          </div>
+          <div>
+            <p><a href="mailto:your.email@example.com">your.email@example.com</a></p>
+            <p><a href="https://github.com/JoonyK129">GitHub Profile</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Joonhee Kim. Built with GitHub Pages.
+    </div>
+  </footer>
+</body>
+</html>
