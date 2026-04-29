@@ -168,14 +168,14 @@
     }
 
     .avatar {
-  width: 112px;
-  height: 112px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  margin-bottom: 18px;
-  border: 1px solid var(--line);
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
     }
 
     .profile-card h2 {
@@ -266,10 +266,13 @@
     }
 
     .publication {
-      padding: 18px 0;
+      padding: 20px 0;
       border-bottom: 1px solid var(--line);
     }
-
+    
+    .publication:first-child {
+      padding-top: 0;
+    }
     .publication:last-child {
       border-bottom: none;
       padding-bottom: 0;
@@ -293,11 +296,16 @@
       font-size: 0.95rem;
     }
 
+    .publication-links {
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
     .publications-card {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 20px;
-      padding: 20px 24px;
+      padding: 24px;
       box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
     }
 
